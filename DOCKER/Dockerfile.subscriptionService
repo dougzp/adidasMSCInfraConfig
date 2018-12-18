@@ -1,0 +1,8 @@
+FROM mcpayment/ubuntu1404-java8:latest
+RUN mkdir ~/spring-env
+ADD  /SubcriptionRegister-0.0.1-SNAPSHOT.jar //
+COPY  /SubcriptionRegister-0.0.1-SNAPSHOT.jar /var
+COPY /spring-eureka-server-entrypoint.sh  /var
+RUN chmod 755 /var/spring-eureka-server-entrypoint.sh
+EXPOSE 8095
+ENTRYPOINT ["java", "-jar", "/SubcriptionRegister-0.0.1-SNAPSHOT.jar"]

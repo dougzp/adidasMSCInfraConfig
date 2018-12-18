@@ -1,0 +1,7 @@
+FROM mcpayment/ubuntu1404-java8:latest
+ADD /adidassbc-1.0.0.jar //
+COPY  /adidassbc-1.0.0.jar /var
+COPY /spring-api-entrypoint.sh  /var
+RUN chmod 755 /var/spring-api-entrypoint.sh
+ENTRYPOINT ["java", "-jar", "/adidassbc-1.0.0.jar"]
+EXPOSE 8095

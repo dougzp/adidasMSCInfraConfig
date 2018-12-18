@@ -1,0 +1,76 @@
+version: '3.0'
+services:
+    zookeeper:
+        image: wurstmeister/zookeeper
+        ports:
+            - 2181:2181
+    kafka:
+        build: .
+        ports:
+            - 9092:9092
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: 192.168.99.100
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock    
+    adidaseurekaserver:
+        build:
+            context: .
+            dockerfile: Dockerfile.eurekaServer
+        image: adidaseurekaserver:latest
+        expose:
+            - 8761
+        ports:
+            - 8761:8761    
+        networks:
+            - spring-enviroment-network
+        volumes:
+            - spring-enviroment-config-repo:/var/lib/spring-enviroment/config-repo
+        logging:
+            driver: json-file
+    adidasapi:
+        build:
+            context: .
+            dockerfile: Dockerfile.subscriptionApi       
+        image: adidasapi:latest
+        expose:
+            - 8091
+        ports:
+            - 8091:8091
+        networks:
+            - spring-enviroment-network
+        logging:
+            driver: json-file
+        volumes:
+            - spring-enviroment-config-repo:/var/lib/spring-enviroment/config-repo
+        depends_on:
+            - adidaseurekaserver
+        links:
+            - kafka:kafka   
+        entrypoint: /var/spring-api-entrypoint.sh                          
+    adidassubscriptionservice:
+        build:
+            context: .
+            dockerfile: Dockerfile.subscriptionService
+        image: adidassubscriptionservice:latest
+        expose:
+            - 8092
+        ports:
+            - 8092:8092                  
+        networks:
+            - spring-enviroment-network
+        depends_on:
+            - adidasapi
+        logging:
+            driver: json-file
+        links:
+            - adidaseurekaserver:adidaseurekaserver  
+        entrypoint: /var/spring-eureka-server-entrypoint.sh 
+    
+
+networks:
+    spring-enviroment-network:
+        driver: bridge
+volumes:
+    spring-enviroment-config-repo:
+        external: true        

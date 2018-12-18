@@ -1,0 +1,15 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: adidasapi
+spec:
+  template:
+    metadata:
+      labels:
+        name: adidasapi
+  container:
+    - name: adidasapi
+        image: adidasapi
+        ports:
+        - containerPort: 8090
+      

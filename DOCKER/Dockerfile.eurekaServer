@@ -1,0 +1,4 @@
+FROM mcpayment/ubuntu1404-java8:latest
+ADD /adidasEurekaServer-0.0.1-SNAPSHOT.jar //
+ENTRYPOINT ["java", "-jar", "/adidasEurekaServer-0.0.1-SNAPSHOT.jar"]
+EXPOSE 8761

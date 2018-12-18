@@ -1,0 +1,15 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: adidassubscriptionservice
+spec:
+  template:
+    metadata:
+      labels:
+        name: adidassubscriptionservice
+  container:
+    - name: adidassubscriptionservice
+        image: adidassubscriptionservice
+        ports:
+        - containerPort: 8095
+      

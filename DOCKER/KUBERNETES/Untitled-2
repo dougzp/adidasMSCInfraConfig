@@ -1,0 +1,8 @@
+keytool -genkeypair -alias bolivadev -keyalg RSA -keysize 2048 -keystore bolivadev.jks -validity 3650
+
+
+
+keytool -genkeypair -alias bolivadev -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore bolivadev.p12 -validity 3650
+
+
+keytool -importkeystore -srckeystore bolivadev.jks -destkeystore bolivadev.p12 -deststoretype pkcs12

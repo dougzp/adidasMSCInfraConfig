@@ -1,0 +1,34 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: adidaseurekaserver
+spec:
+  serviceName: "adidaseurekaserver"
+  selector:
+    matchLabels:
+      app: adidaseurekaserver
+  template:
+    metadata:
+      labels:
+        app: adidaseurekaserver
+    spec:
+      containers:
+      - name: adidaseurekaserver
+        image: adidaseurekaserver
+        ports:
+        - containerPort: 8761
+        env:
+        - name: adidaseurekaserver
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        
+        - name: _JAVA_OPTIONS
+          value: -Deureka.instance.preferIpAddress=false -Deureka.client.serviceUrl.defaultZone=http://adidaseurekaserver:8761/eureka/
+        - name: EUREKA_CLIENT_REGISTERWITHEUREKA
+          value: "true"
+        - name: EUREKA_CLIENT_FETCHREGISTRY
+          value: "true"
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: adidaseurekaserver.eureka
+podManagementPolicy: "Parallel"
